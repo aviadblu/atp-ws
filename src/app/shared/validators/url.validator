@@ -1,0 +1,10 @@
+import {AbstractControl, ValidatorFn} from "@angular/forms";
+
+const urlRegExp = /^((http[s]?|ftp):\/)?\/?([^:\/\s]+)((\/\w+)*\/)([\w\-\.]+[^#?\s]+)(.*)?(#[\w\-]+)?$/;
+
+export function urlValidator(nameRe: RegExp): ValidatorFn {
+  return (control: AbstractControl): {[key: string]: any} => {
+    const forbidden = urlRegExp.test(control.value);
+    return forbidden ? {'forbiddenName': {value: control.value}} : null;
+  };
+}

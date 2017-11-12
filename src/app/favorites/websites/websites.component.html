@@ -1,3 +1,73 @@
-<p>
-  websites works!
-</p>
+<div>
+  <mat-toolbar>
+
+    <mat-toolbar-row>
+      <span>Favorite sites</span>
+      <span class="spacer"></span>
+      <mat-form-field class="example-form-field">
+        <input matInput placeholder="Filter by website name or URL" [ngModel]="filter"
+               (ngModelChange)="filterData($event)"/>
+        <button mat-button *ngIf="filter" matSuffix mat-icon-button aria-label="Clear" (click)="clearFilter()">
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-form-field>
+
+      <button mat-icon-button gridListIcon (click)="toggleViewMode()">
+        <mat-icon *ngIf="view=='grid'">view_list</mat-icon>
+        <mat-icon *ngIf="view=='list'">view_module</mat-icon>
+      </button>
+      <button mat-raised-button color="primary" (click)="openAddNewDialog()">+ Add</button>
+    </mat-toolbar-row>
+  </mat-toolbar>
+
+  <div *ngIf="view=='list'">
+    <mat-table #table [dataSource]="dataSource">
+
+      <!-- Name Column -->
+      <ng-container matColumnDef="name">
+        <mat-header-cell *matHeaderCellDef> Website Name</mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.name}}</mat-cell>
+      </ng-container>
+
+      <!-- Url Column -->
+      <ng-container matColumnDef="url">
+        <mat-header-cell *matHeaderCellDef> URL</mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.url}}</mat-cell>
+      </ng-container>
+
+      <!-- Actions Column -->
+      <ng-container matColumnDef="actions">
+        <mat-header-cell *matHeaderCellDef></mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          <mat-icon>mode_edit</mat-icon>
+          <mat-icon>delete_forever</mat-icon>
+        </mat-cell>
+      </ng-container>
+
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
+
+  </div>
+  <div gridWrapper *ngIf="view=='grid'">
+    <mat-grid-list cols="5" rowHeight="1:1" gutterSize="30">
+      <mat-grid-tile *ngFor="let ws of dataSource.connect() | async">
+        <div class="gridCellWrapper">
+          <img [src]="ws.thumbnail">
+          <label wsName>{{ws.name}}</label>
+          <div class="actions">
+
+            <button mat-icon-button>
+              <mat-icon>delete_forever</mat-icon>
+            </button>
+            <button mat-icon-button>
+              <mat-icon>mode_edit</mat-icon>
+            </button>
+          </div>
+        </div>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </div>
+
+</div>
