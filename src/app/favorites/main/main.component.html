@@ -1,0 +1,33 @@
+<mat-sidenav-container>
+  <mat-sidenav #sidenav mode="side" opened="true">
+    <nav>
+      <ul>
+        <li>
+          <a [routerLink]="['/favorites/websites']"  routerLinkActive="selected">
+            <div iconWrapper>
+              <mat-icon>grade</mat-icon>
+            </div>
+            <div textWrapper>
+              <label>Favorite websites</label>
+              <label class="counter">0</label>
+            </div>
+          </a>
+        </li>
+        <li>
+          <a [routerLink]="['/favorites/actions-log']" routerLinkActive="selected">
+            <div iconWrapper>
+              <mat-icon>featured_play_list</mat-icon>
+            </div>
+            <div textWrapper>
+              <label>Actions log</label>
+              <label class="counter">0</label>
+            </div>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </mat-sidenav>
+  <div>
+    <router-outlet></router-outlet>
+  </div>
+</mat-sidenav-container>
