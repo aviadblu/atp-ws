@@ -1,9 +1,7 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators} from "@angular/forms";
+import {AbstractControl, FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {FavoritesService} from "../../../services/favorites.service";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material";
-
-0
 
 @Component({
   selector: 'app-add-new-website',
@@ -25,6 +23,12 @@ import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material";
 
           <mat-form-field>
             <input type="url" matInput [formControl]="newWebsiteForm.controls['url']" placeholder="Website URL">
+            <mat-hint align="start"
+                      *ngIf="newWebsiteForm.controls['url'].errors &&
+                             newWebsiteForm.controls['url'].dirty &&
+                             newWebsiteForm.controls['url'].errors.validUrl">
+              Invalid URL
+            </mat-hint>
           </mat-form-field>
 
         </div>
@@ -64,14 +68,14 @@ export class AddNewWebsiteComponent implements OnInit {
 
     this.newWebsiteForm = this.fb.group({
       'name': [this.beforeEditData.name || '', Validators.required],
-      'url': [this.beforeEditData.url || '', Validators.required]
+      'url': [this.beforeEditData.url || '', [Validators.required, ValidateUrl]]
     });
 
   }
 
   onSubmit() {
     if (this.newWebsiteForm.valid) {
-      if(this.editMode) {
+      if (this.editMode) {
         this.favSvc.saveFavoriteWebsite(this.beforeEditData.id, this.newWebsiteForm.value);
       } else {
         this.favSvc.addNewFavoriteWebsite(this.newWebsiteForm.value);
@@ -85,11 +89,11 @@ export class AddNewWebsiteComponent implements OnInit {
 
 }
 
-const urlRegExp = /^((http[s]?|ftp):\/)?\/?([^:\/\s]+)((\/\w+)*\/)([\w\-\.]+[^#?\s]+)(.*)?(#[\w\-]+)?$/;
 
-function urlValidator(): ValidatorFn {
-  return (control: AbstractControl): { [key: string]: any } => {
-    const forbidden = urlRegExp.test(control.value);
-    return forbidden ? {'forbiddenUrl': {value: control.value}} : null;
-  };
+export function ValidateUrl(control: AbstractControl) {
+  const regex = new RegExp(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi);
+  if (!control.value.match(regex)) {
+    return {validUrl: true};
+  }
+  return null;
 }
