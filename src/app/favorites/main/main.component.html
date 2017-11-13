@@ -1,9 +1,9 @@
-<mat-sidenav-container>
+<mat-sidenav-container *ngIf="!isPhone">
   <mat-sidenav #sidenav mode="side" opened="true">
     <nav>
       <ul>
         <li>
-          <a [routerLink]="['/favorites/websites']"  routerLinkActive="selected">
+          <a [routerLink]="['/favorites/websites']" routerLinkActive="selected">
             <div iconWrapper>
               <mat-icon>grade</mat-icon>
             </div>
@@ -31,3 +31,17 @@
     <router-outlet></router-outlet>
   </div>
 </mat-sidenav-container>
+
+
+<mat-toolbar *ngIf="isPhone" color="primary">
+  <button mat-icon-button [routerLink]="['/favorites/websites']" routerLinkActive="selected">
+    <mat-icon aria-label="Example icon-button with a heart icon">grade</mat-icon> ({{websitesCounter}})
+  </button>
+  <button mat-icon-button [routerLink]="['/favorites/actions-log']" routerLinkActive="selected">
+    <mat-icon aria-label="Example icon-button with a heart icon">featured_play_list</mat-icon> ({{actionLogsCounter}})
+  </button>
+</mat-toolbar>
+<div contentWrapper mobile *ngIf="isPhone">
+  <router-outlet></router-outlet>
+</div>
+

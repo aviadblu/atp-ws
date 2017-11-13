@@ -4,6 +4,7 @@ import {MatDialog} from "@angular/material";
 import {AddNewWebsiteComponent} from "./add-new-website/add-new-website.component";
 import {FavoritesService} from "../../services/favorites.service";
 import {DeleteConfirmDialogComponent} from "./delete-confirm-dialog/delete-confirm-dialog.component";
+import {BreakpointObserver, Breakpoints} from "@angular/cdk/layout";
 
 @Component({
   selector: 'app-websites',
@@ -15,11 +16,19 @@ export class WebsitesComponent {
   dataSource;
   filter: string = '';
   view: string = 'list';
+  isPhone: boolean = false;
 
   constructor(public dialog: MatDialog,
-              private favSvc: FavoritesService) {
+              private favSvc: FavoritesService,
+              private breakpointObserver: BreakpointObserver) {
 
     this.dataSource = favSvc.getFavoritesWebsitesDataSource();
+
+    breakpointObserver.observe([
+      Breakpoints.Handset
+    ]).subscribe(result => {
+      this.isPhone = result.matches;
+    });
   }
 
   filterData(filterText) {

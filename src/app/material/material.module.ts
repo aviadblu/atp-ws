@@ -10,6 +10,7 @@ import {
   MatGridListModule,
   MatDialogModule
 } from "@angular/material";
+import {LayoutModule} from "@angular/cdk/layout";
 
 @NgModule({
   imports: [
@@ -21,7 +22,8 @@ import {
     MatInputModule,
     MatButtonModule,
     MatGridListModule,
-    MatDialogModule
+    MatDialogModule,
+    LayoutModule
   ],
   declarations: [],
   exports: [
@@ -33,7 +35,8 @@ import {
     MatInputModule,
     MatButtonModule,
     MatGridListModule,
-    MatDialogModule
+    MatDialogModule,
+    LayoutModule
   ]
 })
 export class MaterialModule {

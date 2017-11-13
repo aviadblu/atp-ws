@@ -4,7 +4,7 @@
     <mat-toolbar-row>
       <span>Favorite sites</span>
       <span class="spacer"></span>
-      <mat-form-field class="example-form-field">
+      <mat-form-field class="example-form-field" *ngIf="!isPhone">
         <input matInput placeholder="Filter by website name or URL" [ngModel]="filter"
                (ngModelChange)="filterData($event)"/>
         <button mat-button *ngIf="filter" matSuffix mat-icon-button aria-label="Clear" (click)="clearFilter()">
@@ -18,7 +18,19 @@
       </button>
       <button mat-raised-button color="primary" (click)="openAddNewDialog()">+ Add</button>
     </mat-toolbar-row>
+
+    <mat-toolbar-row>
+      <mat-form-field class="example-form-field" *ngIf="isPhone">
+        <input matInput placeholder="Filter by website name or URL" [ngModel]="filter"
+               (ngModelChange)="filterData($event)"/>
+        <button mat-button *ngIf="filter" matSuffix mat-icon-button aria-label="Clear" (click)="clearFilter()">
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-form-field>
+    </mat-toolbar-row>
   </mat-toolbar>
+
+
 
   <div *ngIf="view=='list'">
     <mat-table #table [dataSource]="dataSource">
@@ -51,7 +63,7 @@
 
   </div>
   <div gridWrapper *ngIf="view=='grid'">
-    <mat-grid-list cols="5" rowHeight="1:1" gutterSize="30">
+    <mat-grid-list [cols]="isPhone ? 3 : 5" rowHeight="1:1" [gutterSize]="isPhone ? 15 : 30">
       <mat-grid-tile *ngFor="let ws of dataSource.connect() | async">
         <div class="gridCellWrapper">
           <img [src]="ws.thumbnail">

@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {FavoritesService} from "../../services/favorites.service";
 import {ActionsLogService} from "../../services/actions-log.service";
+import {BreakpointObserver, Breakpoints} from "@angular/cdk/layout";
 
 @Component({
   selector: 'app-main',
@@ -10,9 +11,11 @@ import {ActionsLogService} from "../../services/actions-log.service";
 export class MainComponent implements OnInit {
   websitesCounter: number = 0;
   actionLogsCounter: number = 0;
+  isPhone: boolean = false;
 
   constructor(private favSvc: FavoritesService,
-              private alSvc: ActionsLogService) {
+              private alSvc: ActionsLogService,
+              private breakpointObserver: BreakpointObserver) {
 
     this.favSvc.websitesCounter$
       .subscribe(count => {
@@ -23,6 +26,12 @@ export class MainComponent implements OnInit {
       .subscribe(count => {
         this.actionLogsCounter = count;
       });
+
+    breakpointObserver.observe([
+      Breakpoints.Handset
+    ]).subscribe(result => {
+      this.isPhone = result.matches;
+    });
   }
 
   ngOnInit() {
