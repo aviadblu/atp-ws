@@ -6,10 +6,9 @@ import {Md5} from 'ts-md5/dist/md5';
 export class FirebaseService {
   private _firebaseInstance;
   private _fb;
-  private FacebookProvider;
 
   constructor() {
-    var config = {
+    const config = {
       apiKey: "AIzaSyAHkiAkPceE3OzontGXc88vvbGwaoiMuWc",
       authDomain: "atp-ws.firebaseapp.com",
       databaseURL: "https://atp-ws.firebaseio.com",

@@ -1,7 +1,7 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators} from "@angular/forms";
 import {FavoritesService} from "../../../services/favorites.service";
-import {MatDialogRef} from "@angular/material";
+import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material";
 
 0
 
@@ -15,7 +15,7 @@ import {MatDialogRef} from "@angular/material";
     `
   ],
   template: `
-    <h2 mat-dialog-title>Add a new website</h2>
+    <h2 mat-dialog-title>{{headline}}</h2>
     <mat-dialog-content>
       <form [formGroup]="newWebsiteForm">
         <div>
@@ -33,29 +33,49 @@ import {MatDialogRef} from "@angular/material";
 
     </mat-dialog-content>
     <mat-dialog-actions>
-      <button mat-button (click)="onSubmit()">Add website</button>
+      <button mat-button mat-raised-button (click)="onSubmit()">{{saveText}}</button>
       <!-- Can optionally provide a result for the closing dialog. -->
-      <button mat-button mat-dialog-close>Cancel</button>
+      <button mat-button mat-raised-button mat-dialog-close>Cancel</button>
     </mat-dialog-actions>
   `
 })
 export class AddNewWebsiteComponent implements OnInit {
   newWebsiteForm: FormGroup;
+  headline: string = 'Add a new website';
+  saveText: string = 'Add website';
+
+  private beforeEditData = {
+    id: '',
+    name: '',
+    url: ''
+  };
+  private editMode = false;
 
   constructor(public dialogRef: MatDialogRef<AddNewWebsiteComponent>,
               private fb: FormBuilder,
-              private favSvc: FavoritesService) {
+              private favSvc: FavoritesService,
+              @Inject(MAT_DIALOG_DATA) private data: any) {
+    if (data.mode == 'edit') {
+      this.editMode = true;
+      this.headline = 'Edit website';
+      this.saveText = 'Save changes';
+      this.beforeEditData = data.data;
+    }
 
     this.newWebsiteForm = this.fb.group({
-      'name': ['', Validators.required],
-      'url': ['', Validators.required]
+      'name': [this.beforeEditData.name || '', Validators.required],
+      'url': [this.beforeEditData.url || '', Validators.required]
     });
 
   }
 
   onSubmit() {
     if (this.newWebsiteForm.valid) {
-      this.favSvc.addNewFavoriteWebsite(this.newWebsiteForm.value);
+      if(this.editMode) {
+        this.favSvc.saveFavoriteWebsite(this.beforeEditData.id, this.newWebsiteForm.value);
+      } else {
+        this.favSvc.addNewFavoriteWebsite(this.newWebsiteForm.value);
+      }
       this.dialogRef.close();
     }
   }

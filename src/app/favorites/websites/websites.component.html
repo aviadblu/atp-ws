@@ -39,8 +39,8 @@
       <ng-container matColumnDef="actions">
         <mat-header-cell *matHeaderCellDef></mat-header-cell>
         <mat-cell *matCellDef="let element">
-          <mat-icon>mode_edit</mat-icon>
-          <mat-icon>delete_forever</mat-icon>
+          <mat-icon (click)="openEditDialog(element)">mode_edit</mat-icon>
+          <mat-icon (click)="confirmDeleteDialog(element)">delete_forever</mat-icon>
         </mat-cell>
       </ng-container>
 
@@ -57,12 +57,11 @@
           <img [src]="ws.thumbnail">
           <label wsName>{{ws.name}}</label>
           <div class="actions">
-
             <button mat-icon-button>
-              <mat-icon>delete_forever</mat-icon>
+              <mat-icon (click)="confirmDeleteDialog(ws)">delete_forever</mat-icon>
             </button>
             <button mat-icon-button>
-              <mat-icon>mode_edit</mat-icon>
+              <mat-icon (click)="openEditDialog(ws)">mode_edit</mat-icon>
             </button>
           </div>
         </div>

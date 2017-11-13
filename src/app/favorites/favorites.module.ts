@@ -9,6 +9,7 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {AddNewWebsiteComponent} from './websites/add-new-website/add-new-website.component';
 import {FavoritesService} from "../services/favorites.service";
 import {FirebaseService} from "../services/firebase.service";
+import {DeleteConfirmDialogComponent} from './websites/delete-confirm-dialog/delete-confirm-dialog.component';
 
 @NgModule({
   imports: [
@@ -19,13 +20,14 @@ import {FirebaseService} from "../services/firebase.service";
     ReactiveFormsModule
   ],
   entryComponents: [
-    AddNewWebsiteComponent
+    AddNewWebsiteComponent,
+    DeleteConfirmDialogComponent
   ],
   providers: [
     FavoritesService,
     FirebaseService
   ],
-  declarations: [MainComponent, WebsitesComponent, ActionsLogComponent, AddNewWebsiteComponent],
+  declarations: [MainComponent, WebsitesComponent, ActionsLogComponent, AddNewWebsiteComponent, DeleteConfirmDialogComponent],
   exports: [MainComponent, WebsitesComponent, ActionsLogComponent]
 })
 export class FavoritesModule {
