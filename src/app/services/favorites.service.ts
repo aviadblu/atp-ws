@@ -8,14 +8,18 @@ import 'rxjs/add/observable/merge';
 import 'rxjs/add/operator/take';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/debounceTime';
+import {ActionsLogService} from "./actions-log.service";
 
 @Injectable()
 export class FavoritesService {
   favoritesWebsites$: BehaviorSubject<FavoriteWebsite[]> = new BehaviorSubject([]);
+  websitesCounter$: BehaviorSubject<number> = new BehaviorSubject(0);
+
   private favoriteWebsitesDataSource;
   private localWebsitesList;
 
-  constructor(private firebaseSvc: FirebaseService) {
+  constructor(private firebaseSvc: FirebaseService,
+              private actionsLogSvc: ActionsLogService) {
     this.favoriteWebsitesDataSource = new FavoriteWebsitesDataSource(this.favoritesWebsites$);
 
 
@@ -24,6 +28,7 @@ export class FavoritesService {
 
     this.favoritesWebsites$.subscribe(list => {
       this.localWebsitesList = this.listToArray(list);
+      this.websitesCounter$.next(this.localWebsitesList.length);
     });
   }
 
@@ -49,7 +54,7 @@ export class FavoritesService {
     let newId = FirebaseService.hashString(new Date().getTime() + payload.url);
     payload.id = newId;
     this.firebaseSvc.fb.ref(`/websites`).child(newId).update(payload);
-    this.addActionLog('Website was added', {
+    this.actionsLogSvc.addActionLog('Website was added', {
       name: payload.name,
       url: payload.url
     });
@@ -57,7 +62,7 @@ export class FavoritesService {
 
   saveFavoriteWebsite(id, payload) {
     this.firebaseSvc.fb.ref(`/websites`).child(id).update(payload);
-    this.addActionLog('Website was edited', {
+    this.actionsLogSvc.addActionLog('Website was edited', {
       name: payload.name,
       url: payload.url
     });
@@ -65,47 +70,11 @@ export class FavoritesService {
 
   deleteFavoriteWebsite(payload) {
     this.firebaseSvc.fb.ref(`/websites`).child(payload.id).remove();
-    this.addActionLog('Website was removed', {
+    this.actionsLogSvc.addActionLog('Website was removed', {
       name: payload.name,
       url: payload.url
     });
   }
-
-  private addActionLog(action, payload) {
-    this.firebaseSvc.fb.ref(`/actions-log`).push({
-      time: this.getFormattedTime(),
-      action: action,
-      name: payload.name,
-      url: payload.url
-    });
-  }
-
-  private getFormattedTime() {
-    function checkZero(data) {
-      if (data.length == 1) {
-        data = "0" + data;
-      }
-      return data;
-    }
-
-    var today = new Date();
-    var day = today.getDate() + "";
-    var month = (today.getMonth() + 1) + "";
-    var year = today.getFullYear() + "";
-    var hour = today.getHours() + "";
-    var minutes = today.getMinutes() + "";
-    var seconds = today.getSeconds() + "";
-
-    day = checkZero(day);
-    month = checkZero(month);
-    year = checkZero(year);
-    hour = checkZero(hour);
-    minutes = checkZero(minutes);
-    seconds = checkZero(seconds);
-
-    return day + "/" + month + "/" + year + " " + hour + ":" + minutes + ":" + seconds;
-  }
-
 }
 
 class FavoriteWebsitesDataSource extends DataSource<any> {

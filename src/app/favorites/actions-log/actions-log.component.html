@@ -1,3 +1,42 @@
-<p>
-  actions-log works!
-</p>
+<div>
+  <mat-toolbar>
+    <mat-toolbar-row>
+      <span>Actions log</span>
+    </mat-toolbar-row>
+  </mat-toolbar>
+
+  <div>
+    <mat-table #table [dataSource]="dataSource">
+
+      <!-- Time Column -->
+      <ng-container matColumnDef="time">
+        <mat-header-cell *matHeaderCellDef> Date / Time</mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.time}}</mat-cell>
+      </ng-container>
+
+      <!-- Action Column -->
+      <ng-container matColumnDef="action">
+        <mat-header-cell *matHeaderCellDef> Action</mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.action}}</mat-cell>
+      </ng-container>
+
+      <!-- Name Column -->
+      <ng-container matColumnDef="name">
+        <mat-header-cell *matHeaderCellDef> Website Name</mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.name}}</mat-cell>
+      </ng-container>
+
+      <!-- Url Column -->
+      <ng-container matColumnDef="url">
+        <mat-header-cell *matHeaderCellDef> URL</mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.url}}</mat-cell>
+      </ng-container>
+
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
+
+  </div>
+
+</div>

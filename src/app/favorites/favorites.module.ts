@@ -10,6 +10,7 @@ import {AddNewWebsiteComponent} from './websites/add-new-website/add-new-website
 import {FavoritesService} from "../services/favorites.service";
 import {FirebaseService} from "../services/firebase.service";
 import {DeleteConfirmDialogComponent} from './websites/delete-confirm-dialog/delete-confirm-dialog.component';
+import {ActionsLogService} from "../services/actions-log.service";
 
 @NgModule({
   imports: [
@@ -24,8 +25,9 @@ import {DeleteConfirmDialogComponent} from './websites/delete-confirm-dialog/del
     DeleteConfirmDialogComponent
   ],
   providers: [
+    FirebaseService,
     FavoritesService,
-    FirebaseService
+    ActionsLogService
   ],
   declarations: [MainComponent, WebsitesComponent, ActionsLogComponent, AddNewWebsiteComponent, DeleteConfirmDialogComponent],
   exports: [MainComponent, WebsitesComponent, ActionsLogComponent]

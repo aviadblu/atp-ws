@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {ActionsLogService} from "../../services/actions-log.service";
 
 @Component({
   selector: 'app-actions-log',
@@ -6,8 +7,13 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./actions-log.component.less']
 })
 export class ActionsLogComponent implements OnInit {
+  displayedColumns = ['time', 'action', 'name', 'url'];
+  dataSource;
+  filter: string = '';
 
-  constructor() { }
+  constructor(private actionsLogSvc: ActionsLogService) {
+    this.dataSource = actionsLogSvc.getActionsLogDataSource();
+  }
 
   ngOnInit() {
   }
